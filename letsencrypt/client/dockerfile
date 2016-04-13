@@ -1,0 +1,5 @@
+FROM quay.io/letsencrypt/letsencrypt:latest
+MAINTAINER Eric Vallee (eric_vallee@webificservices.com)
+COPY ["./run.py", "/opt/run.py"]
+ENTRYPOINT [ "python" ]
+CMD [ "-u", "/opt/run.py" ]
