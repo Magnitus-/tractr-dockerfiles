@@ -1,0 +1,9 @@
+app:
+  build: ./app
+  restart: always
+  ports:
+    - "80:8080"
+  external_links:
+    - letsencrypt-server:letsencrypt-server
+  volumes:
+    - ./routes/routes.js:/home/node-app/app/routes.js
