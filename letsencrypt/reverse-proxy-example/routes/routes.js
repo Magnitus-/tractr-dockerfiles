@@ -1,7 +1,7 @@
 module.exports = [
 {
-    method: '*',
-    path: '/{path*}',
+    method: 'GET',
+    path: '/.well-known/acme-challenge/{path*}',
     handler: {
         proxy: {
             host: 'letsencrypt-server',
