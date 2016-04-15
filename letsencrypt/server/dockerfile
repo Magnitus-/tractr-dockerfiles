@@ -1,0 +1,8 @@
+FROM node:4.4.2
+ENV UID="1000"
+RUN echo "node-app:x:${UID}:${UID}:node-app,,,:/home/node-app:/bin/bash" >> /etc/passwd
+RUN echo "node-app:x:${UID}:" >> /etc/group
+RUN mkdir /home/node-app && chown ${UID}:${UID} /home/node-app
+USER $UID
+WORKDIR /home/node-app/app
+CMD npm install && npm start

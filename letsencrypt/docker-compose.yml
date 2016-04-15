@@ -5,4 +5,13 @@ client:
   volumes:
     - ./client/config.ini:/etc/letsencrypt/cli.ini
     - /etc/letsencrypt/live
-    - /var/www/html/letsencrypt
+  volumes_from:
+    - server
+server:
+  container_name: letsencrypt-server
+  build: ./server
+  expose:
+   - "8080"
+  volumes:
+    - ./server/app:/home/node-app/app
+    - /home/node-app/.well-known/acme-challenge

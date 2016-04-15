@@ -1,0 +1,14 @@
+{
+  "name": "mock_server",
+  "version": "0.1.0",
+  "description": "Mock server for letsencrypt client",
+  "author": "Eric Vallee <eric_vallee@webificservices.com>",
+  "main": "./index.js",
+  "dependencies": {
+      "hapi": "13.x",
+      "inert": "3.x"
+  },
+  "scripts": {
+      "start": "node ./index.js"
+  }
+}
