@@ -16,7 +16,7 @@ server:
   expose:
     - "8080"
   volumes:
-    - /home/node-app/.well-known/acme-challenge
+    - /home/node-app/challenge
 certificates:
   container_name: letsencrypt-certificates
   build: ./client

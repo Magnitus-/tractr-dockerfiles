@@ -14,7 +14,7 @@ server.route([
    path: '/.well-known/acme-challenge/{param*}', 
    handler: { 
                 directory: { 
-                    path: '/home/node-app/.well-known/acme-challenge' 
+                    path: '/home/node-app/challenge' 
                 }
             }
 }]);
