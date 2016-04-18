@@ -7,6 +7,8 @@ client:
     - /etc/letsencrypt/live
   volumes_from:
     - server
+  external_links:
+    - reverse-proxy
 server:
   container_name: letsencrypt-server
   build: ./server
