@@ -4,11 +4,11 @@ client:
   restart: always
   volumes:
     - ./client/config.ini:/etc/letsencrypt/cli.ini
-    - /etc/letsencrypt/live
   volumes_from:
     - server
-  external_links:
-    - reverse-proxy
+    - certificates
+  extra_hosts:
+   - "reverse-proxy:172.17.0.1"
 server:
   container_name: letsencrypt-server
   build: ./server
@@ -17,3 +17,10 @@ server:
     - "8080"
   volumes:
     - /home/node-app/.well-known/acme-challenge
+certificates:
+  container_name: letsencrypt-certificates
+  build: ./client
+  volumes: 
+    - /etc/letsencrypt/live
+  entrypoint: /bin/bash
+  command: ls

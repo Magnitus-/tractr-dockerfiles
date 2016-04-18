@@ -9,3 +9,5 @@ app:
     - letsencrypt-server:letsencrypt-server
   volumes:
     - ./routes/routes.js:/home/node-app/app/routes.js
+  volumes_from:
+    - letsencrypt-certificates

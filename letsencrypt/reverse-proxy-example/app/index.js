@@ -1,4 +1,4 @@
-const Dns = require('dns');
+const Os = require('os');
 const Hapi = require('hapi');
 
 const server = new Hapi.Server();
@@ -12,16 +12,18 @@ server.register({
         console.log('Failed to load h2o2');
         process.exit();
     }
-
-    server.method('get-letsencrypt-ip', (request, reply) => {
-        dns.lookup('letsencrypt-daemon', function(err, address) {
+    
+    var networkInterfaces = Os.networkInterfaces();
+    
+    server.method('getLetsencryptIp', (request, reply) => {
+        //dns.lookup('letsencrypt-daemon', function(err, address) {
             if(err)
             {
                 reply(''); 
                 return;
             }
             reply(address);
-        });
+        //});
     });
     
     server.route(require('./routes.js').concat([
@@ -29,7 +31,7 @@ server.register({
             config: { 
                 pre: [{ 
                     assign: 'IP', 
-                    method: 'get-letsencrypt-ip'
+                    method: 'getLetsencryptIp'
                 }] 
             },
             method: 'POST',

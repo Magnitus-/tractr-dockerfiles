@@ -15,7 +15,7 @@ while True:
             subprocess.check_call(["/opt/letsencrypt/venv/bin/letsencrypt", "certonly", "--test-cert", "--agree-tos"])
         if True: #Replace by check for new certificates
             try:
-                req = urllib2.Request(url="/certificates/reloading", data="")
+                req = urllib2.Request(url="http://reverse-proxy/certificates/reloading", data="")
                 descriptor = urllib2.urlopen(req)
                 body = str(descriptor.read())
             except Exception as e:
