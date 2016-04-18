@@ -10,9 +10,9 @@ import urllib2
 while True:
     try:
         if os.path.isfile("/etc/letsencrypt/live/privkey.pem"):
-            subprocess.check_call(["/opt/letsencrypt/venv/bin/letsencrypt", "renew", "--dry-run", "--agree-tos"])
+            subprocess.check_call(["/opt/certbot/venv/bin/certbot", "renew", "--dry-run", "--agree-tos"])
         else:
-            subprocess.check_call(["/opt/letsencrypt/venv/bin/letsencrypt", "certonly", "--test-cert", "--agree-tos"])
+            subprocess.check_call(["/opt/certbot/venv/bin/certbot", "certonly", "--test-cert", "--agree-tos"])
         if True: #Replace by check for new certificates
             try:
                 req = urllib2.Request(url="http://reverse-proxy/certificates/reloading", data="")
