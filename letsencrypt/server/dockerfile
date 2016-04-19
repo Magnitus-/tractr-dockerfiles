@@ -2,7 +2,7 @@ FROM node:4.4.2
 ENV UID="1000"
 RUN echo "node-app:x:${UID}:${UID}:node-app,,,:/home/node-app:/bin/bash" >> /etc/passwd
 RUN echo "node-app:x:${UID}:" >> /etc/group
-RUN mkdir /home/node-app && mkdir /home/node-app/app
+RUN mkdir /home/node-app && mkdir /home/node-app/app && mkdir /home/node-app/challenge
 COPY ./index.js /home/node-app/app
 COPY ./package.json /home/node-app/app
 WORKDIR /home/node-app/app
