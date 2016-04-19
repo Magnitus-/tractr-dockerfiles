@@ -2,6 +2,7 @@ FROM quay.io/letsencrypt/letsencrypt:latest
 ENV UID="1000"
 MAINTAINER Eric Vallee (eric_vallee@webificservices.com)
 COPY ["./run.py", "/opt/run.py"]
+RUN mkdir /var/log/letsencrypt && chown -R ${UID}:${UID} /var/log/letsencrypt
 USER $UID
 ENTRYPOINT [ "python" ]
 CMD [ "-u", "/opt/run.py" ]
