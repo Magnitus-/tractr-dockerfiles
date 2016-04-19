@@ -13,7 +13,7 @@ while true; do
     CURRENT_TIME=$(date +%s);
     if [ "$(((CURRENT_TIME-LAST_UPDATE)/(24*3600)))" -ge 31 ] ; then
         wget -O - https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem > /etc/letsencrypt/live/intermediate.pem;
-        python acme_tiny.py --account-key /etc/letsencrypt/live/account.key --csr /etc/letsencrypt/live/domain.csr --acme-dir /home/node-app/challenge > /etc/letsencrypt/live/signed.crt;
+        python /opt/acme_tiny.py --account-key /etc/letsencrypt/live/account.key --csr /etc/letsencrypt/live/domain.csr --acme-dir /home/node-app/challenge > /etc/letsencrypt/live/signed.crt;
         cat /etc/letsencrypt/live/signed.crt /etc/letsencrypt/live/intermediate.pem > /etc/letsencrypt/live/chained.pem;
         echo $CURRENT_TIME > /etc/letsencrypt/live/timestamp;
     fi
