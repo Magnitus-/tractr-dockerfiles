@@ -4,7 +4,7 @@ ENV UID="1000"
 RUN echo "letsencrypt-client:x:${UID}:${UID}:letsencrypt-client,,,:/home/letsencrypt-client:/bin/bash" >> /etc/passwd
 RUN echo "letsencrypt-client:x:${UID}:" >> /etc/group
 RUN mkdir /home/letsencrypt-client
-ADD https://github.com/diafygi/acme-tiny/blob/master/acme_tiny.py /opt/acme_tiny.py
+ADD https://raw.githubusercontent.com/diafygi/acme-tiny/master/acme_tiny.py /opt/acme_tiny.py
 COPY ["./run.sh", "/opt/run.sh"]
 RUN chown ${UID}:${UID} /opt/run.sh && \ 
     chown ${UID}:${UID} /opt/acme_tiny.py && \
