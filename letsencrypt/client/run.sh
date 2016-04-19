@@ -16,6 +16,7 @@ while true; do
         python /opt/acme_tiny.py --account-key /etc/letsencrypt/live/account.key --csr /etc/letsencrypt/live/domain.csr --acme-dir /home/node-app/challenge > /etc/letsencrypt/live/signed.crt;
         cat /etc/letsencrypt/live/signed.crt /etc/letsencrypt/live/intermediate.pem > /etc/letsencrypt/live/chained.pem;
         echo $CURRENT_TIME > /etc/letsencrypt/live/timestamp;
+        curl -X POST reverse-proxy:80/certificates/reloading;
     fi
     sleep 1d;
 done
