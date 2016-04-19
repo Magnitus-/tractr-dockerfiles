@@ -17,5 +17,5 @@ while true; do
         cat /etc/letsencrypt/live/signed.crt /etc/letsencrypt/live/intermediate.pem > /etc/letsencrypt/live/chained.pem;
         echo $CURRENT_TIME > /etc/letsencrypt/live/timestamp;
     fi
-    sleep 30d;
+    sleep 1d;
 done
