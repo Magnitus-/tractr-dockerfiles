@@ -6,7 +6,8 @@
   "main": "./index.js",
   "dependencies": {
       "hapi": "13.x",
-      "h2o2": "5.x"
+      "h2o2": "5.x",
+      "ip": "1.x"
   },
   "scripts": {
       "start": "node ./index.js"

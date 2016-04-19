@@ -1,5 +1,6 @@
 const Os = require('os');
 const Hapi = require('hapi');
+const Ip = require('ip');
 
 const server = new Hapi.Server();
 server.connection({ port: 8080 });
@@ -14,30 +15,24 @@ server.register({
     }
     
     var networkInterfaces = Os.networkInterfaces();
+    var dockerSubnet = Ip.mask(networkInterfaces['docker0'][0]['address'], networkInterfaces['docker0'][0]['netmask']);
     
-    server.method('getLetsencryptIp', (request, reply) => {
-        //dns.lookup('letsencrypt-daemon', function(err, address) {
-            if(err)
-            {
-                reply(''); 
-                return;
-            }
-            reply(address);
-        //});
+    server.method('getRequestSubnet', (request, reply) => {
+        reply(Ip.mask(request.info.remoteAddress, networkInterfaces['docker0'][0]['netmask']));
     });
-    
+
     server.route(require('./routes.js').concat([
         {
             config: { 
                 pre: [{ 
-                    assign: 'IP', 
-                    method: 'getLetsencryptIp'
+                    assign: 'requestSubnet', 
+                    method: 'getRequestSubnet'
                 }] 
             },
             method: 'POST',
             path: '/certificates/reloading',
             handler: function(request, reply) {
-                if(request.pre.IP == request.info.remoteAddress)
+                if(request.pre.requestSubnet == dockerSubnet)
                 {
                     server.stop((err) => {
                         process.exit();
