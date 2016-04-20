@@ -15,10 +15,10 @@ server.register({
     }
     
     var networkInterfaces = Os.networkInterfaces();
-    var dockerSubnet = Ip.mask(networkInterfaces['docker0'][0]['address'], networkInterfaces['docker0'][0]['netmask']);
+    var dockerSubnet = Ip.mask(networkInterfaces['eth0'][0]['address'], networkInterfaces['eth0'][0]['netmask']);
     
     server.method('getRequestSubnet', (request, reply) => {
-        reply(Ip.mask(request.info.remoteAddress, networkInterfaces['docker0'][0]['netmask']));
+        reply(Ip.mask(request.info.remoteAddress, networkInterfaces['eth0'][0]['netmask']));
     });
 
     server.route(require('./routes.js').concat([
