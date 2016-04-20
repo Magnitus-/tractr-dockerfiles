@@ -6,7 +6,7 @@ This script is meant to run the letsencrypt client as a composable background da
 
 ## Status
 
-Beta. Functional so far, but incomplete.
+Beta. Functional so far.
 
 ## Usage
 
@@ -27,7 +27,6 @@ Beta. Functional so far, but incomplete.
 
 - Add frequency of checks (currently every 1d) and frequency of updates (currently every 31d) as docker-compose environment variables
 - Improve certificates/keys folder structure
-- Add certificates in example proxy server
 - Add support for more than one domain
 - Create fixed docker images rather than relying on building the image each time
 

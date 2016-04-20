@@ -1,9 +1,25 @@
 const Os = require('os');
+const Fs = require('fs');
 const Hapi = require('hapi');
 const Ip = require('ip');
 
 const server = new Hapi.Server();
 server.connection({ port: 8080 });
+
+try
+{
+    Fs.accessSync('/etc/letsencrypt/live/chained.pem', Fs.R_OK);
+    var tls = {
+      key: Fs.readFileSync('/etc/letsencrypt/live/domain.key'),
+      cert: Fs.readFileSync('/etc/letsencrypt/live/chained.pem')
+    };
+    server.connection({address: '0.0.0.0', port: 44344, tls: tls });
+
+}
+catch(err)
+{
+    console.log('Certificates not found... booting reverse-proxy without https');
+}
 
 server.register({
     register: require('h2o2')
@@ -51,6 +67,6 @@ server.register({
         if (err) {
             throw err;
         }
-        console.log('Server running at:', server.info.uri);
+        console.log('Server running');
     });
 });
