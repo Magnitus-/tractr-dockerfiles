@@ -3,7 +3,22 @@ while true; do
     if [ ! -f /etc/letsencrypt/live/account.key ]; then
         openssl genrsa 4096 > /etc/letsencrypt/live/account.key;
         openssl genrsa 4096 > /etc/letsencrypt/live/domain.key;
-        openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/CN=${DOMAIN}" > /etc/letsencrypt/live/domain.csr;
+        if [[ $DOMAIN == *";"* ]]; then
+            #Multiple domains
+	    IFS=';' read -ra DOMAIN_ARRAY <<< "$DOMAIN";
+	    for i in "${DOMAIN_ARRAY[@]}"; do
+		if [ ! -z "$DNS_ENTRIES" ]; then
+		    DNS_ENTRIES="${DNS_ENTRIES},";
+                else
+                    DNS_ENTRIES='';
+		fi
+		DNS_ENTRIES="${DNS_ENTRIES}DNS:${i}";
+	    done
+            openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=${DNS_ENTRIES}")) > /etc/letsencrypt/live/domain.csr;
+        else
+            #Single domain
+            openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/CN=${DOMAIN}" > /etc/letsencrypt/live/domain.csr;
+        fi
     fi
     if [ ! -f /etc/letsencrypt/live/timestamp ]; then
         #<joke>As long as the script is not executed back in time, it should be fine...</joke>

@@ -6,11 +6,11 @@ This script is meant to run the letsencrypt client as a composable background da
 
 ## Status
 
-Beta. Functional so far.
+Beta. Functional so far. Multiple domains not yet tested.
 
 ## Usage
 
-1. Edit the DOMAIN environment variable in the docker-compose.yml file to your domain
+1. Edit the DOMAIN environment variable in the docker-compose.yml file to your domain (you can put several domains by separating them with a ; character)
 2. Edit the extra_hosts entry in the docker-compose.yml file to point to your localhost's address on docker's bridge (note that the default value should be good if you don't boot the docker daemon with a custom address range)
 3. Ensure you have a reverse-proxy image ready that can (see reverse proxy example):
   - Link to the letsencrypt-server container
@@ -27,8 +27,8 @@ Beta. Functional so far.
 
 - Add frequency of checks (currently every 1d) and frequency of updates (currently every 31d) as docker-compose environment variables
 - Improve certificates/keys folder structure
-- Add support for more than one domain
 - Create fixed docker images rather than relying on building the image each time
+- Make whether to run the client in daemon mode composable (to allow launching the client from cron)
 
 ## Notes
 
