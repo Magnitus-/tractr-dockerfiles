@@ -10,7 +10,7 @@ Beta. Functional so far.
 
 ## Usage
 
-1. Customize the docker-compose.yml file to suit your needs. See "Customizations".
+1. Customize one of the docker-compose files to suit your needs. See "Customizations" and "Docker-Compose Files". To keep instructions succint, I'll assume docker-compose.yml is used.
 2. Ensure you have a reverse-proxy image ready that can (see reverse proxy example):
   - Link to the letsencrypt-server container
   - Maps requests of the ```/.well-known/acme-challenge/{path*}``` variety to the letsencrypt-server container on port 8080
@@ -34,9 +34,9 @@ Beta. Functional so far.
 
 There are 3 docker-compose files included with this project.
 
-docker-compose-dev.yml: Compose file used in development. Builds the images directly on the machine.
-docker-compose.yml: Compose file used for renew-and-exit usage in production. Can be combined with cron and other schedulers to provide automated recurrence on renewal.
-docker-compose-daemon.yml: Compose file used to execute the client as a daemon in production. The container will manage automated renewal reccurence.
+- docker-compose-dev.yml: Compose file used in development. Builds the images directly on the machine.
+- docker-compose.yml: Compose file used for renew-and-exit usage in production. Can be combined with cron and other schedulers to provide automated renewal recurrence.
+- docker-compose-daemon.yml: Compose file used to execute the client as a daemon in production. The container will manage automated renewal reccurence.
 
 ## TODO
 
