@@ -6,31 +6,36 @@ This script is meant to run the letsencrypt client as a composable background da
 
 ## Status
 
-Beta. Functional so far. Multiple domains not yet tested.
+Beta. Functional so far.
 
 ## Usage
 
-1. Edit the DOMAIN environment variable in the docker-compose.yml file to your domain (you can put several domains by separating them with a ; character)
-2. Edit the EXECUTION_DELAY environment variable in the docker-compose.yml file to represent the number of days you want to elapse between executions of the script (advisable to be more frequent than certificate renewals in case there is an error during a particular renewal)
-3. Edit the RENEWAL_DELAY environment variable in the docker-compose.yml file to represent the guaranteed minimum time interval between certificate renewals
-4. Edit the extra_hosts entry in the docker-compose.yml file to point to your localhost's address on docker's bridge (note that the default value should be good if you don't boot the docker daemon with a custom address range)
-5. Ensure you have a reverse-proxy image ready that can (see reverse proxy example):
+1. Customize the docker-compose.yml file to suit your needs. See "Customizations".
+2. Ensure you have a reverse-proxy image ready that can (see reverse proxy example):
   - Link to the letsencrypt-server container
   - Maps requests of the ```/.well-known/acme-challenge/{path*}``` variety to the letsencrypt-server container on port 8080
   - Gets volumes from the letsencrypt-certificates container
   - Gets its certificates from the /etc/letsencrypt/live shared volume
   - Has a ```POST /certificates/reloading``` route that is accessible only by other local docker containers and which, when called, reload certificates (probably by rebooting)
-6. From the project's folder, start the certificate container: docker-compose up -d certificates
-7. From the project's folder, start the letsencrypt server container: docker-compose up -d server
-8. Start your reverse-proxy container
-9. From the project's folder, start the letsencrypt client container: docker-compose up -d client
+3. From the project's folder, start the certificate container: docker-compose up -d certificates
+4. From the project's folder, start the letsencrypt server container: docker-compose up -d server
+5. Start your reverse-proxy container
+6. From the project's folder, start the letsencrypt client container: docker-compose up -d client
+
+## Customizations
+
+- DOMAIN: The domain you want to certify. You can specify several domains, by separating them with ';'
+- EXECUTION_DELAY: Delay between checks for renewal (in days) when the script is running in daemon mode.
+- RENEWAL_DELAY: Minimum lenght of time (in days), between certification renewals. If the script is executed and this amount of time has not elapsed since the last renewal, certificate renewal won't be triggered.
+- DAEMON_MODE: If set to 'yes', the script will keep running in the background, triggered checks for renewal after a number of days specified by EXECUTION_DELAY have elapsed. If set to 'no', the script will only check for renewal once and exit.
+- reverse-proxy (extra_hosts): IP of the reverse-proxy that will be notified of certificate renewals.
 
 ## TODO
 
 - Improve certificates/keys folder structure
 - Create fixed docker images rather than relying on building the image each time
-- Make the decision to run the client in daemon mode composable (to allow launching the client from cron)
 - Make location of the webroot directory composable in client so that it can more easily be used with an existing existing production server
+- Add option to make alert action upon certificate renewal composable with a script
 - Add doc to run script in cron or with existing production server
 
 ## Notes

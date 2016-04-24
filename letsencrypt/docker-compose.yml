@@ -11,6 +11,7 @@ client:
     - DOMAIN=mydomain.com
     - EXECUTION_DELAY=1
     - RENEWAL_DELAY=30
+    - DAEMON_MODE=yes
 server:
   container_name: letsencrypt-server
   build: ./server

@@ -39,5 +39,8 @@ while true; do
         echo $CURRENT_TIME > /etc/letsencrypt/live/timestamp;
         curl -X POST reverse-proxy:80/certificates/reloading;
     fi
+    if [ $DAEMON_MODE != "yes" ]; then
+        exit 0;
+    fi
     sleep "${EXECUTION_DELAY}d";
 done
