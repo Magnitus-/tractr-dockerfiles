@@ -15,7 +15,7 @@ if [ ! -f /etc/letsencrypt/live/account.key ]; then
             fi
             DNS_ENTRIES="${DNS_ENTRIES}DNS:${i}";
         done
-        openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=${DNS_ENTRIES}")) > /etc/letsencrypt/live/domain.csr;
+        openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=${DNS_ENTRIES}")) > /etc/letsencrypt/live/domain.csr;
     else
         #Single domain
         openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/CN=${DOMAIN}" > /etc/letsencrypt/live/domain.csr;
