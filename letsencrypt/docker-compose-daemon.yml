@@ -1,6 +1,7 @@
 client:
   container_name: letsencrypt-client
   image: magnitus/letsencrypt:latest-client
+  restart: always
   volumes_from:
     - server
     - certificates
@@ -10,7 +11,7 @@ client:
     - DOMAIN=mydomain.com
     - EXECUTION_DELAY=1
     - RENEWAL_DELAY=30
-    - DAEMON_MODE=no
+    - DAEMON_MODE=yes
 server:
   container_name: letsencrypt-server
   image: magnitus/letsencrypt:latest-webroot-server

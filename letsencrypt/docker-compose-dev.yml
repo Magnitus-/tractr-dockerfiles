@@ -1,6 +1,6 @@
 client:
   container_name: letsencrypt-client
-  image: magnitus/letsencrypt:latest-client
+  build: ./client
   volumes_from:
     - server
     - certificates
@@ -13,7 +13,7 @@ client:
     - DAEMON_MODE=no
 server:
   container_name: letsencrypt-server
-  image: magnitus/letsencrypt:latest-webroot-server
+  build: ./server
   restart: always
   expose:
     - "8080"
@@ -21,7 +21,7 @@ server:
     - /home/node-app/challenge
 certificates:
   container_name: letsencrypt-certificates
-  image: magnitus/letsencrypt:latest-client
+  build: ./client
   volumes: 
     - /etc/letsencrypt/live
   entrypoint: /bin/bash
