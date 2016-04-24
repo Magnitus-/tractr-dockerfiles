@@ -9,6 +9,8 @@ client:
     - "reverse-proxy:172.17.0.1"
   environment:
     - DOMAIN=mydomain.com
+    - EXECUTION_DELAY=1
+    - RENEWAL_DELAY=30
 server:
   container_name: letsencrypt-server
   build: ./server
