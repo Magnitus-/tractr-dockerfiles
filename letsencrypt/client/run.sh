@@ -1,29 +1,35 @@
 #!/bin/bash
+
+#Generate account & domain keys and domain csr. This only needs to be done once...
+if [ ! -f /etc/letsencrypt/live/account.key ]; then
+    openssl genrsa 4096 > /etc/letsencrypt/live/account.key;
+    openssl genrsa 4096 > /etc/letsencrypt/live/domain.key;
+    if [[ $DOMAIN == *";"* ]]; then
+        #Multiple domains
+        IFS=';' read -ra DOMAIN_ARRAY <<< "$DOMAIN";
+        for i in "${DOMAIN_ARRAY[@]}"; do
+            if [ ! -z "$DNS_ENTRIES" ]; then
+                DNS_ENTRIES="${DNS_ENTRIES},";
+            else
+                DNS_ENTRIES='';
+            fi
+            DNS_ENTRIES="${DNS_ENTRIES}DNS:${i}";
+        done
+        openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=${DNS_ENTRIES}")) > /etc/letsencrypt/live/domain.csr;
+    else
+        #Single domain
+        openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/CN=${DOMAIN}" > /etc/letsencrypt/live/domain.csr;
+    fi
+fi
+
+#If no timestamp for last renewal exists, create one that is already expired
+if [ ! -f /etc/letsencrypt/live/timestamp ]; then
+    #<joke>As long as the script is not executed back in time, it should be fine...</joke>
+    echo "1400000000" > /etc/letsencrypt/live/timestamp;
+fi
+
+#Run the certificate signing request check in a loop (if in daemon mode), renewing only if enough time has passed since last check
 while true; do
-    if [ ! -f /etc/letsencrypt/live/account.key ]; then
-        openssl genrsa 4096 > /etc/letsencrypt/live/account.key;
-        openssl genrsa 4096 > /etc/letsencrypt/live/domain.key;
-        if [[ $DOMAIN == *";"* ]]; then
-            #Multiple domains
-            IFS=';' read -ra DOMAIN_ARRAY <<< "$DOMAIN";
-            for i in "${DOMAIN_ARRAY[@]}"; do
-                if [ ! -z "$DNS_ENTRIES" ]; then
-                    DNS_ENTRIES="${DNS_ENTRIES},";
-                else
-                    DNS_ENTRIES='';
-                fi
-                DNS_ENTRIES="${DNS_ENTRIES}DNS:${i}";
-            done
-            openssl req -new -sha256 -key domain.key -subj "/" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf "[SAN]\nsubjectAltName=${DNS_ENTRIES}")) > /etc/letsencrypt/live/domain.csr;
-        else
-            #Single domain
-            openssl req -new -sha256 -key /etc/letsencrypt/live/domain.key -subj "/CN=${DOMAIN}" > /etc/letsencrypt/live/domain.csr;
-        fi
-    fi
-    if [ ! -f /etc/letsencrypt/live/timestamp ]; then
-        #<joke>As long as the script is not executed back in time, it should be fine...</joke>
-        echo "1400000000" > /etc/letsencrypt/live/timestamp;
-    fi
     LAST_UPDATE=`cat /etc/letsencrypt/live/timestamp`;
     CURRENT_TIME=$(date +%s);
     if [ "$(((CURRENT_TIME-LAST_UPDATE)/(24*3600)))" -ge $RENEWAL_DELAY ] ; then
