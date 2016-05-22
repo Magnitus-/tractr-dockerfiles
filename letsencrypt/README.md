@@ -17,10 +17,9 @@ Beta. Functional so far.
   - Gets volumes from the letsencrypt-certificates container
   - Gets its certificates from the /etc/letsencrypt/live shared volume
   - Has a ```POST /certificates/reloading``` route that is accessible only by other local docker containers and which, when called, reload certificates (probably by rebooting)
-3. From the project's folder, start the certificate container: docker-compose up -d certificates
-4. From the project's folder, start the letsencrypt server container: docker-compose up -d server
-5. Start your reverse-proxy container
-6. From the project's folder, start the letsencrypt client container: docker-compose up -d client
+3. From the project's folder, start the letsencrypt server container: docker-compose up -d server
+4. Start your reverse-proxy container
+5. From the project's folder, start the letsencrypt client container: docker-compose up -d client
 
 ## Customizations
 
