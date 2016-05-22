@@ -1,9 +1,9 @@
 client:
   container_name: letsencrypt-client
-  image: magnitus/letsencrypt:latest-client
-  volumes_from:
-    - server
-    - certificates
+  image: magnitus/letsencrypt:client
+  volumes:
+    - letsencrypt_certificates:/etc/letsencrypt/live
+    - letsencrypt_challenges:/home/node-app/challenge
   extra_hosts:
     - "reverse-proxy:172.17.0.1"
   environment:
@@ -13,16 +13,9 @@ client:
     - DAEMON_MODE=no
 server:
   container_name: letsencrypt-server
-  image: magnitus/letsencrypt:latest-webroot-server
+  image: magnitus/letsencrypt:server
   restart: always
   expose:
     - "8080"
   volumes:
-    - /home/node-app/challenge
-certificates:
-  container_name: letsencrypt-certificates
-  image: magnitus/letsencrypt:latest-client
-  volumes: 
-    - /etc/letsencrypt/live
-  entrypoint: /bin/bash
-  command: chown -R 1000:1000 /etc/letsencrypt/live
+    - letsencrypt_challenges:/home/node-app/challenge
