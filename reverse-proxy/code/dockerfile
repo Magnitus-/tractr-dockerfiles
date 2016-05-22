@@ -1,0 +1,8 @@
+FROM magnitus/node-app:4
+
+ENV UID="1000"
+
+COPY ./index.js ${APP_DIR}/
+COPY ./package.json ${APP_DIR}/
+
+RUN finalize.sh

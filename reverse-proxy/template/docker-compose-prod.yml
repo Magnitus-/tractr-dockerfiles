@@ -1,0 +1,33 @@
+app:
+  container_name: reverse-proxy
+  image: magnitus/reverse-proxy:hapi
+  restart: always
+  ports:
+    - "80:8080"
+    - "443:44344"
+  links:
+    - letsencrypt-server:letsencrypt-server
+  volumes:
+    - ./routes/routes.js:/home/node-app/app/routes.js
+    - letsencrypt_certificates:/etc/letsencrypt/live
+letsencrypt-client:
+  container_name: letsencrypt-client
+  image: magnitus/letsencrypt:client
+  volumes_from:
+    - letsencrypt_certificates:/etc/letsencrypt/live
+    - letsencrypt_challenges:/home/node-app/challenge
+  extra_hosts:
+    - "reverse-proxy:172.17.0.1"
+  environment:
+    - DOMAIN=dev.somedomain.com;www.somedomain.com
+    - EXECUTION_DELAY=1
+    - RENEWAL_DELAY=30
+    - DAEMON_MODE=yes
+letsencrypt-server:
+  container_name: letsencrypt-server
+  image: magnitus/letsencrypt:server
+  restart: always
+  expose:
+    - "8080"
+  volumes:
+    - letsencrypt_challenges:/home/node-app/challenge
