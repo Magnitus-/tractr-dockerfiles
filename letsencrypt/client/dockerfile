@@ -15,7 +15,7 @@ RUN chown ${UID}:${UID} /opt/run.sh && \
     mkdir -p /etc/letsencrypt/live && \
     chown -R ${UID}:${UID} /etc/letsencrypt/live && \
     mkdir -p /home/node-app/challenge && \
-    chown -R ${UID}:${UID} /home/node-app/challenge
+    chown -R ${UID}:${UID} /home/node-app/challenge && \
     chown -R ${UID}:${UID} /home/letsencrypt-client
 
 USER $UID
