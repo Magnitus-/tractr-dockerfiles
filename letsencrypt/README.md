@@ -11,15 +11,12 @@ Beta. Functional so far.
 ## Usage
 
 1. Customize one of the docker-compose files to suit your needs. See "Customizations" and "Docker-Compose Files". To keep instructions succint, I'll assume docker-compose.yml is used.
-2. Ensure you have a reverse-proxy image ready that can (see reverse proxy example):
-  - Link to the letsencrypt-server container
+2. Ensure you have a reverse-proxy image ready that meets the following criteria (see reverse-proxy directiory for a functioning implementation):
+  - Use the "letsencrypt_certificates:/etc/letsencrypt/live" volume as its certificates directory.
   - Maps requests of the ```/.well-known/acme-challenge/{path*}``` variety to the letsencrypt-server container on port 8080
-  - Gets volumes from the letsencrypt-certificates container
-  - Gets its certificates from the /etc/letsencrypt/live shared volume
   - Has a ```POST /certificates/reloading``` route that is accessible only by other local docker containers and which, when called, reload certificates (probably by rebooting)
-3. From the project's folder, start the letsencrypt server container: docker-compose up -d server
-4. Start your reverse-proxy container
-5. From the project's folder, start the letsencrypt client container: docker-compose up -d client
+3. Add the reverse-proxy configuration to the docker-compose file (see reverse-proxy directiory for a functioning implementation)
+4. Run docker-compose up -f <YourDockerComposeFile> up -d
 
 ## Customizations
 
