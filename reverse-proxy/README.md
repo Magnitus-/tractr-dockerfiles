@@ -13,7 +13,7 @@ Beta. Functional so far.
 ## Features
 
 - Auto-renewing certificates. Reverse-proxy will gracefully reboot upon certificate renewal.
-- Reverse-proxy will function with unencrypted http is certificates cannot be located (useful for local dev)
+- Reverse-proxy will function with unencrypted http if certificates cannot be located (useful for local dev)
 - Routing file well isolated from the rest of the logic and easily editable
 - Reverse-proxy, as well as the letsencrypt client and server, run as a non-root user
 - Reverse-proxy spawned from dump-init which makes it responsive to SIGTERM signals
@@ -26,3 +26,17 @@ Take the templates and adapt them to your need. Also adapt the routing file to s
 The dev template will run without the letsencrypt client or tls.
 
 The prod template will run with a daemon letsencrypt client.
+
+## Base Image
+
+You can include the routes directly in the image instead of relying on a mapped file.
+
+You'll need to do the following steps:
+
+```
+FROM magnitus/reverse-proxy:hapi-base
+
+<Copy your route file to /home/node-app/app/routes.js>
+
+USER $UID
+```
