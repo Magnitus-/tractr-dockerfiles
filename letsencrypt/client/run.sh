@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z "${REVERSE_PROXY_PORT}" ]; then
+    REVERSE_PROXY_PORT=80
+fi
+
 #Generate account & domain keys and domain csr. This only needs to be done once...
 if [ ! -f /etc/letsencrypt/live/account.key ]; then
     openssl genrsa 4096 > /etc/letsencrypt/live/account.key;
@@ -37,7 +41,7 @@ while true; do
         python /opt/acme_tiny.py --account-key /etc/letsencrypt/live/account.key --csr /etc/letsencrypt/live/domain.csr --acme-dir /home/node-app/challenge > /etc/letsencrypt/live/signed.crt;
         cat /etc/letsencrypt/live/signed.crt /etc/letsencrypt/live/intermediate.pem > /etc/letsencrypt/live/chained.pem;
         echo $CURRENT_TIME > /etc/letsencrypt/live/timestamp;
-        curl -X POST reverse-proxy:80/certificates/reloading;
+        curl -X POST reverse-proxy:${REVERSE_PROXY_PORT}/certificates/reloading;
     fi
     if [ $DAEMON_MODE != "yes" ]; then
         exit 0;
